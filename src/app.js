@@ -33,27 +33,48 @@ async function initializeApp() {
   window.SplashScreen.updateStatus('Inicializando...');
 
   try {
+    console.log('[App] 1/5 - Iniciando PWA setup...');
     // Detecta instalação PWA
     setupPWA();
     window.SplashScreen.updateStatus('Preparando interface...');
 
+    console.log('[App] 2/5 - Iniciando conectividade...');
     // Detecta mudanças de conectividade
     setupConnectivity();
 
+    console.log('[App] 3/5 - Configurando UI event listeners...');
     // Mapeia eventos de UI
     setupUIEventListeners();
     window.SplashScreen.updateStatus('Carregando dados...');
 
+    console.log('[App] 4/5 - Inicializando database...');
     // Inicializa DB
     await routeStore.getRoutes();
 
+    console.log('[App] 5/5 - Initialization complete!');
     console.log('✓ CyclerRoute inicializado com sucesso');
     
     // Esconde splash com delay elegante
     await new Promise(resolve => setTimeout(resolve, 400));
     window.SplashScreen.hide();
+
+    // Debug: Log o estado do app
+    setTimeout(() => {
+      console.log('📋 Estado do App:');
+      console.log('- Router disponível:', typeof router);
+      console.log('- UI disponível:', typeof ui);
+      console.log('- RouteStore disponível:', typeof routeStore);
+      console.log('- MapInit disponível:', typeof mapInit);
+      console.log('- Home screen:', document.getElementById('screen-home')?.className);
+      console.log('- Botões encontrados:');
+      console.log('  - btn-create-route:', !!document.getElementById('btn-create-route'));
+      console.log('  - btn-my-routes:', !!document.getElementById('btn-my-routes'));
+      console.log('  - btn-import-route:', !!document.getElementById('btn-import-route'));
+    }, 500);
+
   } catch (error) {
-    console.error('Erro ao inicializar app:', error);
+    console.error('❌ Erro ao inicializar app:', error);
+    console.error('Stack:', error.stack);
     window.SplashScreen.updateStatus('Erro ao carregar');
     ui.showToast('Erro ao inicializar app', 'error');
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -107,86 +128,171 @@ function setupConnectivity() {
 // ========================================
 
 function setupUIEventListeners() {
+  console.log('[App] Configurando event listeners...');
+
   // Home Screen
-  document.getElementById('btn-create-route')?.addEventListener('click', () => {
-    router.goToCreateRoute();
-    initCreateRouteScreen();
-  });
+  const btnCreateRoute = document.getElementById('btn-create-route');
+  if (btnCreateRoute) {
+    btnCreateRoute.addEventListener('click', () => {
+      console.log('[App] Click em "Criar Rota"');
+      router.goToCreateRoute();
+      initCreateRouteScreen();
+    });
+    console.log('✓ btn-create-route listener OK');
+  } else {
+    console.error('❌ btn-create-route não encontrado!');
+  }
 
-  document.getElementById('btn-my-routes')?.addEventListener('click', () => {
-    router.goToRoutesList();
-    initRoutesListScreen();
-  });
+  const btnMyRoutes = document.getElementById('btn-my-routes');
+  if (btnMyRoutes) {
+    btnMyRoutes.addEventListener('click', () => {
+      console.log('[App] Click em "Minhas Rotas"');
+      router.goToRoutesList();
+      initRoutesListScreen();
+    });
+    console.log('✓ btn-my-routes listener OK');
+  } else {
+    console.error('❌ btn-my-routes não encontrado!');
+  }
 
-  document.getElementById('btn-import-route')?.addEventListener('click', handleImportRoute);
+  const btnImportRoute = document.getElementById('btn-import-route');
+  if (btnImportRoute) {
+    btnImportRoute.addEventListener('click', handleImportRoute);
+    console.log('✓ btn-import-route listener OK');
+  } else {
+    console.error('❌ btn-import-route não encontrado!');
+  }
 
   // Create Route Screen
-  document.getElementById('btn-back-create')?.addEventListener('click', () => {
-    routeCreator.resetRoute();
-    mapInit.destroyMap();
-    router.goBack();
-  });
+  const btnBackCreate = document.getElementById('btn-back-create');
+  if (btnBackCreate) {
+    btnBackCreate.addEventListener('click', () => {
+      console.log('[App] Click em "Voltar" (Create)');
+      routeCreator.resetRoute();
+      mapInit.destroyMap();
+      router.goBack();
+    });
+    console.log('✓ btn-back-create listener OK');
+  }
 
-  document.getElementById('btn-undo-point')?.addEventListener('click', () => {
-    routeCreator.removeLastPoint();
-  });
+  const btnUndoPoint = document.getElementById('btn-undo-point');
+  if (btnUndoPoint) {
+    btnUndoPoint.addEventListener('click', () => {
+      console.log('[App] Click em "Desfazer"');
+      routeCreator.removeLastPoint();
+    });
+    console.log('✓ btn-undo-point listener OK');
+  }
 
-  document.getElementById('btn-finish-route')?.addEventListener('click', () => {
-    if (routeCreator.isRouteValid()) {
-      ui.showModal('dialog-save-route');
-      ui.focusElement('input-route-name');
-    } else {
-      ui.showToast('Adicione pelo menos 2 pontos', 'warning');
-    }
-  });
+  const btnFinishRoute = document.getElementById('btn-finish-route');
+  if (btnFinishRoute) {
+    btnFinishRoute.addEventListener('click', () => {
+      console.log('[App] Click em "Salvar Rota"');
+      if (routeCreator.isRouteValid()) {
+        ui.showModal('dialog-save-route');
+        ui.focusElement('input-route-name');
+      } else {
+        ui.showToast('Adicione pelo menos 2 pontos', 'warning');
+      }
+    });
+    console.log('✓ btn-finish-route listener OK');
+  }
 
   // Save Route Dialog
-  document.getElementById('btn-cancel-save')?.addEventListener('click', () => {
-    ui.hideModal('dialog-save-route');
-  });
+  const btnCancelSave = document.getElementById('btn-cancel-save');
+  if (btnCancelSave) {
+    btnCancelSave.addEventListener('click', () => {
+      console.log('[App] Click em "Cancelar"');
+      ui.hideModal('dialog-save-route');
+    });
+    console.log('✓ btn-cancel-save listener OK');
+  }
 
-  document.getElementById('btn-confirm-save')?.addEventListener('click', handleSaveRoute);
+  const btnConfirmSave = document.getElementById('btn-confirm-save');
+  if (btnConfirmSave) {
+    btnConfirmSave.addEventListener('click', handleSaveRoute);
+    console.log('✓ btn-confirm-save listener OK');
+  }
 
   // Allow Enter key to save
-  document.getElementById('input-route-name')?.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      handleSaveRoute();
-    }
-  });
+  const inputRouteName = document.getElementById('input-route-name');
+  if (inputRouteName) {
+    inputRouteName.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        handleSaveRoute();
+      }
+    });
+    console.log('✓ input-route-name listener OK');
+  }
 
   // Routes List Screen
-  document.getElementById('btn-back-list')?.addEventListener('click', () => {
-    router.goBack();
-  });
+  const btnBackList = document.getElementById('btn-back-list');
+  if (btnBackList) {
+    btnBackList.addEventListener('click', () => {
+      console.log('[App] Click em "Voltar" (List)');
+      router.goBack();
+    });
+    console.log('✓ btn-back-list listener OK');
+  }
 
   // View Route Screen
-  document.getElementById('btn-back-view')?.addEventListener('click', () => {
-    routeLoader.clearDisplay();
-    mapInit.destroyMap();
-    router.goBack();
-  });
+  const btnBackView = document.getElementById('btn-back-view');
+  if (btnBackView) {
+    btnBackView.addEventListener('click', () => {
+      console.log('[App] Click em "Voltar" (View)');
+      routeLoader.clearDisplay();
+      mapInit.destroyMap();
+      router.goBack();
+    });
+    console.log('✓ btn-back-view listener OK');
+  }
 
-  document.getElementById('btn-navigate-route')?.addEventListener('click', handleStartNavigation);
-  document.getElementById('btn-export-route')?.addEventListener('click', handleExportRoute);
-  document.getElementById('btn-delete-route')?.addEventListener('click', handleDeleteRoute);
+  const btnNavigateRoute = document.getElementById('btn-navigate-route');
+  if (btnNavigateRoute) {
+    btnNavigateRoute.addEventListener('click', handleStartNavigation);
+    console.log('✓ btn-navigate-route listener OK');
+  }
+
+  const btnExportRoute = document.getElementById('btn-export-route');
+  if (btnExportRoute) {
+    btnExportRoute.addEventListener('click', handleExportRoute);
+    console.log('✓ btn-export-route listener OK');
+  }
+
+  const btnDeleteRoute = document.getElementById('btn-delete-route');
+  if (btnDeleteRoute) {
+    btnDeleteRoute.addEventListener('click', handleDeleteRoute);
+    console.log('✓ btn-delete-route listener OK');
+  }
 
   // Navigate Screen
-  document.getElementById('btn-stop-navigate')?.addEventListener('click', () => {
-    routeLoader.stopNavigation();
-    router.goToViewRoute();
-    initViewRouteScreen();
-  });
+  const btnStopNavigate = document.getElementById('btn-stop-navigate');
+  if (btnStopNavigate) {
+    btnStopNavigate.addEventListener('click', () => {
+      console.log('[App] Click em "Parar"');
+      routeLoader.stopNavigation();
+      router.goToViewRoute();
+      initViewRouteScreen();
+    });
+    console.log('✓ btn-stop-navigate listener OK');
+  }
 
   // Install PWA button
-  document.getElementById('install-btn')?.addEventListener('click', async () => {
-    if (!deferredPrompt) return;
+  const installBtn = document.getElementById('install-btn');
+  if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
 
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log(`Resultado instalação: ${outcome}`);
-    deferredPrompt = null;
-    ui.setInstallButtonVisible(false);
-  });
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`Resultado instalação: ${outcome}`);
+      deferredPrompt = null;
+      ui.setInstallButtonVisible(false);
+    });
+    console.log('✓ install-btn listener OK');
+  }
+
+  console.log('[App] ✓ Todos os event listeners configurados!');
 }
 
 // ========================================
