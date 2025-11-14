@@ -1,10 +1,22 @@
-const CACHE_NAME = 'cyclerroute-v1';
+const CACHE_NAME = 'cyclerroute-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/offline.html',
   '/assets/css/styles.css',
   '/manifest.json',
+  '/src/app.js',
+  '/src/ui.js',
+  '/src/router.js',
+  '/src/config.js',
+  '/src/utils/distance.js',
+  '/src/map/map-init.js',
+  '/src/map/route-creator.js',
+  '/src/map/route-loader.js',
+  '/src/storage/db.js',
+  '/src/storage/route-store.js',
+  '/assets/icons/icon-192.png',
+  '/assets/icons/icon-512.png',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'
 ];
