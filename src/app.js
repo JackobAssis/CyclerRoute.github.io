@@ -28,23 +28,36 @@ window.addEventListener('DOMContentLoaded', initializeApp);
 async function initializeApp() {
   console.log('🚴 CyclerRoute iniciando...');
 
+  // Cria splash screen
+  window.SplashScreen.create();
+  window.SplashScreen.updateStatus('Inicializando...');
+
   try {
     // Detecta instalação PWA
     setupPWA();
+    window.SplashScreen.updateStatus('Preparando interface...');
 
     // Detecta mudanças de conectividade
     setupConnectivity();
 
     // Mapeia eventos de UI
     setupUIEventListeners();
+    window.SplashScreen.updateStatus('Carregando dados...');
 
     // Inicializa DB
     await routeStore.getRoutes();
 
     console.log('✓ CyclerRoute inicializado com sucesso');
+    
+    // Esconde splash com delay elegante
+    await new Promise(resolve => setTimeout(resolve, 400));
+    window.SplashScreen.hide();
   } catch (error) {
     console.error('Erro ao inicializar app:', error);
+    window.SplashScreen.updateStatus('Erro ao carregar');
     ui.showToast('Erro ao inicializar app', 'error');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    window.SplashScreen.hide();
   }
 }
 

@@ -162,14 +162,37 @@
 
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    
+    <!-- Version Manager (detecta atualizações) -->
+    <script type="module" src="src/version-manager.js"></script>
+    
+    <!-- Splash Screen (mostra durante load) -->
+    <script type="module" src="src/splash-screen.js"></script>
+    
+    <!-- App Principal -->
     <script type="module" src="src/app.js"></script>
 
     <script>
-        // Register Service Worker
+        // Register Service Worker (atualizado com network-first strategy)
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js').catch(err => {
-                console.log('Service Worker registration failed:', err);
-            });
+            navigator.serviceWorker.register('service-worker.js')
+                .then(reg => {
+                    console.log('✓ Service Worker registrado', reg);
+                    
+                    // Monitora atualizações do SW
+                    reg.addEventListener('updatefound', () => {
+                        const newWorker = reg.installing;
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                console.log('🔄 Nova versão disponível');
+                                // Notifica user (já feito pelo version-manager)
+                            }
+                        });
+                    });
+                })
+                .catch(err => {
+                    console.warn('Service Worker registration failed:', err);
+                });
         }
     </script>
 </body>

@@ -1,97 +1,155 @@
-const CACHE_NAME = 'cyclerroute-v2';
-const STATIC_ASSETS = [
-  '/',
+/**
+ * CyclerRoute Service Worker v3
+ * Estratégia: Network-first para JS/HTML (sempre nova versão)
+ * Cache-first para CSS/ícones (para performance)
+ */
+
+const CACHE_VERSION = 'v3';
+const CACHE_NAME = `cyclerroute-${CACHE_VERSION}`;
+
+// Assets que SEMPRE devem vir da rede (código executável)
+const NETWORK_FIRST = [
   '/index.html',
-  '/offline.html',
-  '/assets/css/styles.css',
-  '/manifest.json',
   '/src/app.js',
   '/src/ui.js',
   '/src/router.js',
   '/src/config.js',
+  '/src/validate.js',
+  '/src/tests.js',
   '/src/utils/distance.js',
   '/src/map/map-init.js',
   '/src/map/route-creator.js',
   '/src/map/route-loader.js',
   '/src/storage/db.js',
-  '/src/storage/route-store.js',
+  '/src/storage/route-store.js'
+];
+
+// Assets estáticos (CSS, ícones) - cache-first
+const STATIC_ASSETS = [
+  '/',
+  '/offline.html',
+  '/assets/css/styles.css',
+  '/manifest.json',
   '/assets/icons/icon-192.png',
   '/assets/icons/icon-512.png',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css',
   'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'
 ];
 
-// Install event - cache static assets
+// Install event - cache static assets apenas
 self.addEventListener('install', (event) => {
+  console.log('[SW] Installing v3...');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
+        // Cachea apenas assets estáticos (não código JS)
         return cache.addAll(STATIC_ASSETS).catch(() => {
-          // Se algum asset falhar, continua mesmo assim
+          console.warn('[SW] Erro ao cachear alguns assets');
           return Promise.resolve();
         });
       })
-      .then(() => self.skipWaiting())
+      .then(() => {
+        console.log('[SW] Install complete');
+        return self.skipWaiting();
+      })
   );
 });
 
 // Activate event - cleanup old caches
 self.addEventListener('activate', (event) => {
+  console.log('[SW] Activating, cleaning old caches...');
   event.waitUntil(
     caches.keys()
       .then((cacheNames) => {
         return Promise.all(
           cacheNames
             .filter((name) => name !== CACHE_NAME)
-            .map((name) => caches.delete(name))
+            .map((name) => {
+              console.log('[SW] Deleting old cache:', name);
+              return caches.delete(name);
+            })
         );
       })
-      .then(() => self.clients.claim())
+      .then(() => {
+        console.log('[SW] Activate complete');
+        return self.clients.claim();
+      })
   );
 });
 
-// Fetch event - offline-first strategy
+// Fetch event - estratégia dinâmica
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET requests
+  // Skip non-GET
   if (request.method !== 'GET') {
     return;
   }
 
-  // Offline-first strategy
+  // ========================================
+  // NETWORK-FIRST: Código JS/HTML sempre novo
+  // ========================================
+  if (NETWORK_FIRST.some((path) => url.pathname.includes(path))) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (!response || response.status !== 200) {
+            return response;
+          }
+
+          const responseToCache = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, responseToCache);
+          });
+
+          return response;
+        })
+        .catch(() => {
+          // Se falhar rede, tenta cache
+          return caches.match(request)
+            .then((cached) => {
+              if (cached) {
+                console.log('[SW] Servindo do cache:', url.pathname);
+                return cached;
+              }
+
+              // Fallback offline
+              if (request.destination === 'document') {
+                return caches.match('/offline.html');
+              }
+
+              return null;
+            });
+        })
+    );
+    return;
+  }
+
+  // ========================================
+  // CACHE-FIRST: Assets estáticos
+  // ========================================
   event.respondWith(
     caches.match(request)
-      .then((cachedResponse) => {
-        // Se encontrou no cache, retorna
-        if (cachedResponse) {
-          return cachedResponse;
+      .then((cached) => {
+        if (cached) {
+          return cached;
         }
 
-        // Senão, tenta fetch da rede
         return fetch(request)
           .then((response) => {
-            // Se resposta válida, caches e retorna
-            if (!response || response.status !== 200 || response.type === 'error') {
+            if (!response || response.status !== 200) {
               return response;
             }
 
-            // Clone a response
             const responseToCache = response.clone();
-
-            // Cache dynamic requests (mapas, etc)
-            if (url.hostname.includes('tile') || url.hostname.includes('leaflet')) {
-              caches.open(CACHE_NAME)
-                .then((cache) => {
-                  cache.put(request, responseToCache);
-                });
-            }
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(request, responseToCache);
+            });
 
             return response;
           })
           .catch(() => {
-            // Se falhar rede e não tem cache, retorna offline page
             if (request.destination === 'document') {
               return caches.match('/offline.html');
             }
@@ -101,9 +159,12 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Handle messages from clients
+// Message handling
 self.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
 });
+
+console.log('[SW] Service Worker v3 loaded - Network-first strategy');
+
