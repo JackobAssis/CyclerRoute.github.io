@@ -5,10 +5,10 @@
   "type": "module",
   "main": "index.html",
   "scripts": {
-    "start": "python -m http.server 8000",
-    "build": "echo 'CyclerRoute is a static PWA - no build needed'",
-    "dev": "python -m http.server 8000",
-    "serve": "python -m http.server 8000"
+  "start": "python -m http.server 8000",
+  "build": "node scripts/build.cjs",
+  "dev": "python -m http.server 8000",
+  "serve": "python -m http.server 8000"
   },
   "keywords": [
     "pwa",
