@@ -1,0 +1,54 @@
+# ============================================================================
+# .vercelignore - Arquivos a ignorar no deploy Vercel
+# ============================================================================
+
+# Documentação (não precisa no servidor)
+README.md
+SETUP.md
+QUICK_START.md
+ARCHITECTURE.md
+CHANGELOG.md
+DELIVERY.md
+SUMMARY.md
+INDEX.md
+INICIO.md
+PROJECT_COMPLETE.txt
+FINAL_SUMMARY.txt
+DEPLOYMENT_VERCEL.md
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.vscode
+.idea
+*.sublime-project
+*.sublime-workspace
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# Node (se houver)
+node_modules
+npm-debug.log
+
+# Build/Temp (se houver)
+.next
+dist
+build
+.cache
+
+# ENV
+.env
+.env.local
+.env.*.local
+
+# Miscelânea
+*.bak
+*.tmp
+.editorconfig
+.prettierignore

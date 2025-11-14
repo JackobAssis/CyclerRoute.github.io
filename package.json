@@ -1,0 +1,32 @@
+{
+  "name": "cyclerroute",
+  "version": "1.0.0",
+  "description": "PWA para criação e navegação de rotas de bicicleta",
+  "type": "module",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "build": "echo 'CyclerRoute is a static PWA - no build needed'",
+    "dev": "python -m http.server 8000",
+    "serve": "python -m http.server 8000"
+  },
+  "keywords": [
+    "pwa",
+    "cycling",
+    "offline",
+    "gps",
+    "progressive-web-app",
+    "routes",
+    "bicycle",
+    "map"
+  ],
+  "author": "CyclerRoute Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JackobAssis/CyclerRoute"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

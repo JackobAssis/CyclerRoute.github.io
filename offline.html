@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sem Conexão - CyclerRoute</title>
+    <meta name="theme-color" content="#1db854">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .offline-container {
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .offline-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            opacity: 0.7;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #1db854;
+        }
+
+        .offline-message {
+            font-size: 16px;
+            color: #a0a0a0;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        .info-box {
+            background-color: rgba(29, 184, 84, 0.1);
+            border: 1px solid rgba(29, 184, 84, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .info-box h3 {
+            color: #1db854;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .info-box ul {
+            list-style: none;
+            font-size: 13px;
+            color: #b0b0b0;
+            line-height: 1.8;
+        }
+
+        .info-box li:before {
+            content: "✓ ";
+            color: #1db854;
+            margin-right: 8px;
+        }
+
+        .status {
+            padding: 10px;
+            background-color: rgba(200, 100, 100, 0.1);
+            border: 1px solid rgba(200, 100, 100, 0.3);
+            border-radius: 6px;
+            font-size: 13px;
+            color: #ff9999;
+            margin-top: 20px;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            .offline-icon {
+                animation: pulse 2s infinite;
+            }
+
+            @keyframes pulse {
+                0%, 100% {
+                    opacity: 0.7;
+                }
+                50% {
+                    opacity: 0.4;
+                }
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">📡</div>
+        <h1>Sem Conexão</h1>
+        <p class="offline-message">
+            Você está offline. Recursos limitados estão disponíveis no momento.
+        </p>
+
+        <div class="info-box">
+            <h3>O que você pode fazer:</h3>
+            <ul>
+                <li>Visualizar rotas salvas</li>
+                <li>Navegar rotas existentes</li>
+                <li>Criar nova rota (offline)</li>
+            </ul>
+        </div>
+
+        <div class="status">
+            Aguardando conexão com a internet...
+        </div>
+
+        <p style="margin-top: 30px; font-size: 13px; color: #707070;">
+            Tente recarregar a página quando a conexão for restaurada.
+        </p>
+    </div>
+
+    <script>
+        // Auto-reload when connection is restored
+        window.addEventListener('online', () => {
+            location.reload();
+        });
+    </script>
+</body>
+</html>

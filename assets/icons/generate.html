@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CyclerRoute Icon Generator</title>
+</head>
+<body>
+    <h1>CyclerRoute Icon Generator</h1>
+    <p>Este arquivo gera os ícones necessários para o PWA.</p>
+    
+    <canvas id="canvas"></canvas>
+    
+    <script>
+        // Gera ícones em PNG
+        const sizes = [192, 512];
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        function generateIcon(size, maskable = false) {
+            canvas.width = size;
+            canvas.height = size;
+            
+            // Fundo
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Círculo verde
+            const padding = maskable ? size * 0.1 : size * 0.05;
+            ctx.fillStyle = '#1db854';
+            ctx.beginPath();
+            ctx.arc(size / 2, size / 2, size / 2 - padding, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Ícone de bicicleta (simplificado)
+            ctx.fillStyle = '#0a0a0a';
+            ctx.font = `bold ${size * 0.5}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('🚴', size / 2, size / 2);
+            
+            // Download
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                const filename = maskable ? `icon-${size}-maskable.png` : `icon-${size}.png`;
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+        
+        // Gera todos os ícones
+        console.log('Gerando ícones...');
+        sizes.forEach(size => {
+            setTimeout(() => generateIcon(size, false), 500);
+            setTimeout(() => generateIcon(size, true), 1000);
+        });
+    </script>
+</body>
+</html>
