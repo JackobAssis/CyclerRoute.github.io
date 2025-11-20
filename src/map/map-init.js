@@ -159,8 +159,8 @@ export function createCustomIcon(color = '#1db854') {
  * Cria ícone padrão
  * @returns {L.Icon}
  */
-function createDefaultIcon() {
-  return createCustomIcon('#1db854');
+export function createDefaultIcon() {
+  return createCustomIcon('#32FF7E');
 }
 
 /**
@@ -176,7 +176,7 @@ export function createCurrentIcon() {
  * @returns {L.Icon}
  */
 export function createStartIcon() {
-  return createCustomIcon('#4CAF50');
+  return createCustomIcon('#32FF7E');
 }
 
 /**
@@ -197,7 +197,7 @@ export function addPolyline(points, options = {}) {
   if (!mapInstance || points.length < 2) return null;
 
   const defaultOptions = {
-    color: '#1db854',
+    color: '#32FF7E',
     weight: 3,
     opacity: 0.8,
     dashArray: null,

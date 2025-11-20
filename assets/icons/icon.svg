@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <rect width="192" height="192" fill="#0B0F0E"/>
+  <rect x="16" y="16" width="160" height="160" rx="32" fill="#32FF7E"/>
+  <text x="96" y="110" text-anchor="middle" fill="#0B0F0E" font-family="Arial, sans-serif" font-size="48" font-weight="bold">🚴</text>
+  <text x="96" y="140" text-anchor="middle" fill="#0B0F0E" font-family="Arial, sans-serif" font-size="16" font-weight="bold">CyclerRoute</text>
+</svg>
