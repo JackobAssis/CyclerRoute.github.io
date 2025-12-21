@@ -110,14 +110,61 @@ body {
   pointer-events: all;
 }
 
+
+/* Home FAB and floating buttons */
 .home-controls {
   display: flex;
   flex-direction: row;
-  gap: 16px;
-  align-items: flex-end;
   justify-content: center;
-  width: 100%;
-  max-width: 420px;
+  align-items: flex-end;
+  width: 100vw;
+  pointer-events: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 88px; /* leave space for side buttons */
+  z-index: 1050;
+}
+.home-controls > * {
+  pointer-events: all;
+}
+
+/* Floating install and my routes buttons */
+#install-btn, #btn-my-routes {
+  box-shadow: 0 2px 16px 0 rgba(50,255,126,0.18);
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  background: var(--color-bg-tertiary);
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  transition: 0.2s all cubic-bezier(.4,0,.2,1);
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+#install-btn {
+  left: 16px;
+  right: auto;
+}
+#btn-my-routes {
+  right: 16px;
+  left: auto;
+}
+
+@media (max-width: 700px) {
+  .home-controls {
+    bottom: 72px;
+  }
+  #install-btn, #btn-my-routes {
+    font-size: 14px;
+    min-width: 90px;
+    max-width: 120px;
+    padding: 10px 10px;
+    bottom: 12px;
+  }
 }
 
 /* ========================================

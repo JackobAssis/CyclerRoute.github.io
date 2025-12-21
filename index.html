@@ -32,15 +32,21 @@
         <!-- Home Screen -->
         <div id="screen-home" class="screen active">
             <div id="map-home" class="map-container"></div>
-            
+
+            <!-- Floating Action Button for Criar Rota -->
             <div class="floating-controls home-controls">
-                <button id="btn-create-route" class="btn btn-primary btn-floating">
-                    ➕ Criar Rota
-                </button>
-                <button id="btn-my-routes" class="btn btn-secondary btn-floating">
-                    📋 Minhas Rotas
+                <button id="btn-create-route" class="btn btn-primary btn-floating" aria-label="Criar nova rota" title="Criar nova rota">
+                    ➕ Nova Rota
                 </button>
             </div>
+
+            <!-- Floating Install and My Routes Buttons (bottom left/right) -->
+            <button id="install-btn" class="btn btn-secondary btn-floating" style="position: fixed; left: 16px; bottom: 24px; z-index: 1100; display: none; min-width: 120px; max-width: 180px; padding: 12px 18px;" aria-label="Instalar aplicativo" title="Instalar aplicativo no dispositivo">
+                ⬇️ Instalar App
+            </button>
+            <button id="btn-my-routes" class="btn btn-secondary btn-floating" style="position: fixed; right: 16px; bottom: 24px; z-index: 1100; min-width: 120px; max-width: 180px; padding: 12px 18px;" aria-label="Minhas rotas salvas" title="Ver minhas rotas salvas">
+                📋 Minhas Rotas
+            </button>
         </div>
 
         <!-- Create Route Screen -->

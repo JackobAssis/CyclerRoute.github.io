@@ -605,6 +605,14 @@ function setupEventListeners() {
   // Home
   document.getElementById('btn-create-route')?.addEventListener('click', goToCreate);
   document.getElementById('btn-my-routes')?.addEventListener('click', goToRoutesList);
+  document.getElementById('install-btn')?.addEventListener('click', () => {
+    if (window.deferredPrompt) {
+      window.deferredPrompt.prompt();
+      window.deferredPrompt.userChoice.then(() => {
+        window.deferredPrompt = null;
+      });
+    }
+  });
 
   // Create
   document.getElementById('btn-back-create')?.addEventListener('click', goHome);
@@ -643,6 +651,25 @@ function setupEventListeners() {
   document.getElementById('btn-stop-navigation')?.addEventListener('click', stopNavigation);
   document.getElementById('btn-close-summary')?.addEventListener('click', closeNavigationComplete);
 }
+
+
+// ========================================
+// PWA INSTALL PROMPT HANDLING
+// ========================================
+
+window.deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  window.deferredPrompt = e;
+  const btn = document.getElementById('install-btn');
+  if (btn) btn.style.display = 'flex';
+});
+
+window.addEventListener('appinstalled', () => {
+  window.deferredPrompt = null;
+  const btn = document.getElementById('install-btn');
+  if (btn) btn.style.display = 'none';
+});
 
 // ========================================
 // UTILIDADES
