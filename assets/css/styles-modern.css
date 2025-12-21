@@ -1,4 +1,49 @@
 /* ========================================
+   SIDEBAR BUTTONS - Vertical Home Actions
+   ======================================== */
+
+.sidebar-buttons {
+  position: fixed;
+  top: 80px;
+  left: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  z-index: 1200;
+  background: none;
+  pointer-events: none;
+}
+.sidebar-buttons > * {
+  pointer-events: all;
+}
+
+.btn-vertical {
+  min-width: 140px;
+  max-width: 180px;
+  padding: 14px 18px;
+  font-size: 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px 0 rgba(50,255,126,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+@media (max-width: 700px) {
+  .sidebar-buttons {
+    top: 12px;
+    left: 6px;
+    gap: 10px;
+  }
+  .btn-vertical {
+    min-width: 90px;
+    max-width: 120px;
+    font-size: 13px;
+    padding: 10px 10px;
+  }
+}
+/* ========================================
    CYCLERROUTE - MODERN & ELEGANT DESIGN
    Escopo: Minimalista, Futurista, Dark Mode
    Cores: Verde Neon #32FF7E, Preto #0B0F0E
