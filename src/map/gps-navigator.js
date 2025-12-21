@@ -392,3 +392,69 @@ export function getProgress() {
     lastPosition
   };
 }
+
+// --- Rastreamento passivo (para telas de criação / centralização) ---
+let passiveWatchId = null;
+let passiveCallbacks = {
+  onPassivePosition: null,
+  onPassiveError: null
+};
+
+/**
+ * Inicia rastreamento passivo (apenas fornece posição atual periodicamente)
+ * @param {Function} cb - callback(position)
+ */
+export function startPassiveTracking(cb) {
+  if (!navigator.geolocation) {
+    if (passiveCallbacks.onPassiveError) passiveCallbacks.onPassiveError(new Error('Geolocation não suportado'));
+    return;
+  }
+
+  passiveCallbacks.onPassivePosition = cb;
+
+  const options = {
+    enableHighAccuracy: true,
+    timeout: 10000,
+    maximumAge: 5000
+  };
+
+  // Se já estiver em watch ativo (navegação), repassar última posição via callback
+  if (watchId && lastPosition && passiveCallbacks.onPassivePosition) {
+    passiveCallbacks.onPassivePosition(lastPosition);
+  }
+
+  // Não duplicar watchers
+  if (passiveWatchId) return;
+
+  passiveWatchId = navigator.geolocation.watchPosition((pos) => {
+    const current = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+    lastPosition = current;
+    if (passiveCallbacks.onPassivePosition) passiveCallbacks.onPassivePosition(current);
+  }, (err) => {
+    if (passiveCallbacks.onPassiveError) passiveCallbacks.onPassiveError(err);
+  }, options);
+}
+
+/**
+ * Para o rastreamento passivo
+ */
+export function stopPassiveTracking() {
+  if (passiveWatchId && navigator.geolocation) {
+    navigator.geolocation.clearWatch(passiveWatchId);
+    passiveWatchId = null;
+  }
+  passiveCallbacks = { onPassivePosition: null, onPassiveError: null };
+}
+
+/**
+ * Tenta pré-verificar permissão de geolocalização (retorna Promise<boolean>)
+ */
+export async function checkGeolocationPermission() {
+  try {
+    if (!navigator.permissions) return false;
+    const status = await navigator.permissions.query({ name: 'geolocation' });
+    return status.state === 'granted' || status.state === 'prompt';
+  } catch (e) {
+    return false;
+  }
+}

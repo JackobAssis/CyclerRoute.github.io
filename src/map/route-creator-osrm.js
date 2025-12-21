@@ -74,6 +74,51 @@ export function addWaypoint(lat, lng) {
 }
 
 /**
+ * Adiciona waypoint a partir de objeto {lat, lng}
+ * @param {Object} point
+ */
+export function addWaypointFromPoint(point) {
+  if (!point) return;
+  addWaypoint(point.lat, point.lng);
+}
+
+/**
+ * Remove o último waypoint adicionado
+ */
+export function removeLastWaypoint() {
+  if (waypoints.length === 0) return;
+
+  waypoints.pop();
+
+  // Recalcula ou limpa
+  if (waypoints.length >= 2) {
+    calculateRoute();
+  } else if (waypoints.length === 1) {
+    // Mostra marcador único para o ponto restante
+    addSingleMarker(waypoints[0].lat, waypoints[0].lng);
+    if (routingControl) {
+      map.removeControl(routingControl);
+      routingControl = null;
+    }
+  } else {
+    // Nenhum waypoint
+    clearRoute();
+  }
+
+  if (callbacks.onWaypointAdded) {
+    callbacks.onWaypointAdded(waypoints.length);
+  }
+}
+
+/**
+ * Retorna contagem de waypoints
+ * @returns {number}
+ */
+export function getWaypointsCount() {
+  return waypoints.length;
+}
+
+/**
  * Adiciona marcador único (quando só tem 1 ponto)
  */
 function addSingleMarker(lat, lng) {
