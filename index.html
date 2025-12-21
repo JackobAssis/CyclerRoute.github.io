@@ -33,8 +33,8 @@
                 <!-- Home Screen -->
                 <div id="screen-home" class="screen active">
                     <div id="map-home" class="map-container"></div>
-                    <!-- Vertical Sidebar Buttons -->
-                    <div class="sidebar-buttons">
+                    <!-- Botões principais: lateral no desktop, barra inferior no mobile -->
+                    <div class="sidebar-buttons" id="sidebar-buttons">
                         <button id="btn-create-route" class="btn btn-primary btn-vertical" aria-label="Criar nova rota" title="Criar nova rota">
                             ➕ Nova Rota
                         </button>
@@ -42,6 +42,17 @@
                             📋 Minhas Rotas
                         </button>
                         <button id="install-btn" class="btn btn-secondary btn-vertical" style="display: none;" aria-label="Instalar aplicativo" title="Instalar aplicativo no dispositivo">
+                            ⬇️ Instalar App
+                        </button>
+                    </div>
+                    <div class="mobile-bottom-bar" id="mobile-bottom-bar">
+                        <button id="btn-create-route-mobile" class="btn btn-primary btn-mobile" aria-label="Criar nova rota" title="Criar nova rota">
+                            ➕ Nova Rota
+                        </button>
+                        <button id="btn-my-routes-mobile" class="btn btn-secondary btn-mobile" aria-label="Minhas rotas salvas" title="Ver minhas rotas salvas">
+                            📋 Minhas Rotas
+                        </button>
+                        <button id="install-btn-mobile" class="btn btn-secondary btn-mobile" style="display: none;" aria-label="Instalar aplicativo" title="Instalar aplicativo no dispositivo">
                             ⬇️ Instalar App
                         </button>
                     </div>
