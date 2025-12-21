@@ -27,25 +27,27 @@
     <meta name="color-scheme" content="dark">
 </head>
 <body>
-    <!-- Main Content -->
-    <main id="app">
-        <!-- Home Screen -->
-        <div id="screen-home" class="screen active">
-            <div id="map-home" class="map-container"></div>
-
-            <!-- Vertical Sidebar Buttons -->
-            <div class="sidebar-buttons">
-                <button id="btn-create-route" class="btn btn-primary btn-vertical" aria-label="Criar nova rota" title="Criar nova rota">
-                    ➕ Nova Rota
-                </button>
-                <button id="btn-my-routes" class="btn btn-secondary btn-vertical" aria-label="Minhas rotas salvas" title="Ver minhas rotas salvas">
-                    📋 Minhas Rotas
-                </button>
-                <button id="install-btn" class="btn btn-secondary btn-vertical" style="display: none;" aria-label="Instalar aplicativo" title="Instalar aplicativo no dispositivo">
-                    ⬇️ Instalar App
-                </button>
+        <!-- Main Content -->
+        <main id="app">
+            <div class="main-content">
+                <!-- Home Screen -->
+                <div id="screen-home" class="screen active">
+                    <div id="map-home" class="map-container"></div>
+                    <!-- Vertical Sidebar Buttons -->
+                    <div class="sidebar-buttons">
+                        <button id="btn-create-route" class="btn btn-primary btn-vertical" aria-label="Criar nova rota" title="Criar nova rota">
+                            ➕ Nova Rota
+                        </button>
+                        <button id="btn-my-routes" class="btn btn-secondary btn-vertical" aria-label="Minhas rotas salvas" title="Ver minhas rotas salvas">
+                            📋 Minhas Rotas
+                        </button>
+                        <button id="install-btn" class="btn btn-secondary btn-vertical" style="display: none;" aria-label="Instalar aplicativo" title="Instalar aplicativo no dispositivo">
+                            ⬇️ Instalar App
+                        </button>
+                    </div>
+                </div>
+                <!-- ...existing code for other screens... -->
             </div>
-        </div>
 
         <!-- Create Route Screen -->
         <div id="screen-create" class="screen">
